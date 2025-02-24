@@ -12,8 +12,8 @@ function crosswordSolver(emptypuzll, words) {
         return 'Error'
     }
     let puzzle_matrix = split(emptypuzll)
-    console.log(emptypuzll)
-    console.log(words)
+    let positions = findWordsPositions(puzzle_matrix)
+    console.log(positions)
 
     return "puzzle is safe"
 }
@@ -36,14 +36,12 @@ function split(puzzl){
 
 function findWordsPositions(puzlle_matrix){
     let positions = []
-
     for (let i = 0 ; i< puzlle_matrix.length; i++){
         for (let j = 0; j < puzlle_matrix[i].length; j++){
-            
+            positions.push({row:i,col:j,count:Number(puzlle_matrix[i][j])})
         }
     }
-
-
+    return positions
 }
-console.log(words.map(test => test.split('')))
-console.log(split(puzzle))
+
+console.log(crosswordSolver(puzzle,words))

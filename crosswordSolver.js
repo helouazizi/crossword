@@ -1,25 +1,37 @@
 function crosswordSolver(puzzel, words) {
   if (typeof puzzel !== 'string' || !Array.isArray(words)) {
+    console.log("Error")
     return "Error"
   }
 
   if (puzzel.trim() === '' || words.length === 0) {
+    console.log("Error")
     return "Error"
   }
 
+
+ // let double = new Set()
   for (let word of words) {
     if (typeof word !== 'string') {
+      console.log("Error")
       return "Error";
     }
+    // if (double.has(word)) {
+    //   console.log("Error")
+    //   return "Error";
+    // }
+    //double.add(word)
+
   }
+  //double = []
 
   // 2D array
   let grid = gridThePuzzle(puzzel)
-  console.log(grid)
   const rows = grid.length;
   const cols = grid[0].length;
 
   if (rows === 0 || cols === 0 || !grid.every(row => row.length === cols)) {
+    console.log("Error")
     return "Error"
   }
 
@@ -30,6 +42,7 @@ function crosswordSolver(puzzel, words) {
       const num = parseInt(grid[r][c]);
       if (grid[r][c] !== '.' && !isNaN(num)) {
         if (num > 2) {
+          console.log("Error")
           return "Error"
         }
         let wordCount = 0;
@@ -55,19 +68,20 @@ function crosswordSolver(puzzel, words) {
         }
         // Validate that the starting number matches the number of words that can start
         if (wordCount !== num) {
+          console.log("Error")
           return "Error"
         }
       }
     }
   }
-  console.log(wordPositions)
-
   // checks if the start positions are the same as the words 
   if (wordPositions.length !== words.length) {
+    console.log("Error")
     return "Error"
   }
   // ensures that words array hasn't duplicated words, Set accepts only one word 
   if (new Set(words).size !== words.length) {
+    console.log("Error")
     return "Error"
   }
   // ensures that words has only letter no number or special characters 
@@ -79,33 +93,6 @@ function crosswordSolver(puzzel, words) {
   let solutionCount = 0;
   // mark solutions 
   let solutions = new Set();
-
-  function solve(posIndex) {
-    if (posIndex === wordPositions.length) {
-      if (isValidSolution()) {
-        const solution = grid.map(row => row.join('')).join('\n');
-        if (!solutions.has(solution)) {
-          solutionCount++;
-          solutions.add(solution);
-        }
-      }
-      return;
-    }
-
-    const { row, col, length, direction } = wordPositions[posIndex];
-    for (const word of words) {
-      if (!usedWords.has(word) && canPlaceWord(word, row, col, length, direction)) {
-        placeWord(word, row, col, direction);
-        usedWords.add(word);
-        solve(posIndex + 1);
-
-        removeWord(word, row, col, direction);
-        usedWords.delete(word);
-      }
-    }
-  }
-
-  solve(0);
 
   function canPlaceWord(word, row, col, length, direction) {
     if (word.length !== length) return false;
@@ -144,23 +131,22 @@ function crosswordSolver(puzzel, words) {
   }
   // this function will transform the puzzle to a grid 2d matrix 
   function gridThePuzzle(emptyPuzzle) {
-    return emptyPuzzle.split('\n').map(index => index.split(''))
-    // // this var will hold the empty puzzle as an array
-    // let puzzArr = emptyPuzzle.split("\n")
-    // // this is our main 2d matrix 
-    // let matrix_array = []
-    // // we'll loop over instances, and return them finally to 2d array
-    // for (let instance of puzzArr) {
-    //     let tempArr = instance.split('')
-    //     // remember, to use push method, u should declare the array 
-    //     matrix_array.push(tempArr)
-    // }
-    // return matrix_array
+    // this var will hold the empty puzzle as an array
+    let puzzArr = emptyPuzzle.split("\n")
+    // this is our main 2d matrix 
+    let matrix_array = []
+    // we'll loop over instances, and return them finally to 2d array
+    for (let instance of puzzArr) {
+      let tempArr = instance.split('')
+      // remember, to use push method, u should declare the array 
+      matrix_array.push(tempArr)
+    }
+    return matrix_array
   }
   // checks whether the crossword grid contains only valid words from the given list.
   function isValidSolution() {
     const gridWords = new Set();
-   
+
     // Check horizontal words
     for (let r = 0; r < rows; r++) {
       let word = '';
@@ -177,9 +163,7 @@ function crosswordSolver(puzzel, words) {
       if (word.length > 1) {
         gridWords.add(word);
       }
-
     }
-    console.log(gridWords)
 
     // Check vertical words
     for (let c = 0; c < cols; c++) {
@@ -198,7 +182,6 @@ function crosswordSolver(puzzel, words) {
         gridWords.add(word);
       }
     }
-    console.log(gridWords)
 
     // Check if all grid words are in the input word list
     for (const word of gridWords) {
@@ -210,7 +193,33 @@ function crosswordSolver(puzzel, words) {
     return gridWords.size === words.length;
   }
 
+  function solve(posIndex) {
+    if (posIndex === wordPositions.length) {
+      if (isValidSolution()) {
+        const solution = grid.map(row => row.join('')).join('\n');
+        if (!solutions.has(solution)) {
+          solutionCount++;
+          solutions.add(solution);
+        }
+      }
+      return;
+    }
 
+    const { row, col, length, direction } = wordPositions[posIndex];
+    for (const word of words) {
+      if (!usedWords.has(word) && canPlaceWord(word, row, col, length, direction)) {
+        placeWord(word, row, col, direction);
+        usedWords.add(word);
+
+        solve(posIndex + 1);
+
+        removeWord(word, row, col, direction);
+        usedWords.delete(word);
+      }
+    }
+  }
+
+  solve(0);
 
   if (solutionCount === 1) {
     console.log([...solutions][0]);
@@ -222,8 +231,7 @@ function crosswordSolver(puzzel, words) {
 }
 
 
-const Puzzle = `2001\n0..0\n1000\n0..0`
+const Puzzle = '2001\n0..0\n1000\n0..0'
 
-const words = ['casa', 'alan', 'ciAo', 'Anta']
+const words = ['aaad', 'aaac', 'aaad', 'aaae']
 crosswordSolver(Puzzle, words)
-

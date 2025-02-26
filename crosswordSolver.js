@@ -10,23 +10,17 @@ function crosswordSolver(puzzel, words) {
   }
 
 
- // let double = new Set()
   for (let word of words) {
     if (typeof word !== 'string') {
       console.log("Error")
       return "Error";
     }
-    // if (double.has(word)) {
-    //   console.log("Error")
-    //   return "Error";
-    // }
-    //double.add(word)
 
   }
-  //double = []
 
   // 2D array
   let grid = gridThePuzzle(puzzel)
+  console.log(grid)
   const rows = grid.length;
   const cols = grid[0].length;
 
@@ -74,6 +68,7 @@ function crosswordSolver(puzzel, words) {
       }
     }
   }
+  console.log(wordPositions)
   // checks if the start positions are the same as the words 
   if (wordPositions.length !== words.length) {
     console.log("Error")
@@ -85,7 +80,8 @@ function crosswordSolver(puzzel, words) {
     return "Error"
   }
   // ensures that words has only letter no number or special characters 
-  if (words.some(word => !/^[a-zA-Z]+$/.test(word))) {
+  if (words.every(word => !/^[a-zA-Z]+$/.test(word))) {
+    console.log("Error1")
     return "Error"
   }
   // mark used words 
@@ -146,7 +142,6 @@ function crosswordSolver(puzzel, words) {
   // checks whether the crossword grid contains only valid words from the given list.
   function isValidSolution() {
     const gridWords = new Set();
-
     // Check horizontal words
     for (let r = 0; r < rows; r++) {
       let word = '';
@@ -229,9 +224,11 @@ function crosswordSolver(puzzel, words) {
     console.log('Error');
   }
 }
+const emptyPuzzle = `2001
+0..0
+1000
+0..0`
+const words = ['casa', 'alan', 'ciao', 'anta']
 
 
-const Puzzle = '2001\n0..0\n1000\n0..0'
-
-const words = ['aaad', 'aaac', 'aaad', 'aaae']
-crosswordSolver(Puzzle, words)
+crosswordSolver(emptyPuzzle, words)
